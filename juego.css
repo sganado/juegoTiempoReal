@@ -1,0 +1,58 @@
+
+#izq
+{
+	width: 75%;
+	height: 1000px;
+	float:left;
+}
+#der
+{
+    width: 25%;
+    height: 1000px;
+    float:right;
+}
+.result
+{
+	width: 25%;
+	height: 1000px;
+	float:right;
+	background-color:red;
+}
+
+#menuDer
+{
+    position: absolute;
+    width: 200px;
+    border: solid 1px #ccc;
+    border-radius: 5px;
+    box-shadow: 1px 1px 10px #c0c0c0;
+    display: none;
+    padding: 10px;
+    background: #fff;
+    z-index: 100;
+}
+    #menuDer ul
+    {
+        padding: 0;
+        margin: 0;
+        list-style-type: none;
+    }
+        #menuDer ul li
+        {
+            padding: 7px;
+            cursor: pointer;
+        }
+            #menuDer ul li:hover
+            {
+                background: #ccc;
+                border-radius: 3px;
+            }
+
+
+#coor
+{
+	width:25%;
+	height: 1000px;
+	
+	background-color: red;
+}
