@@ -5,11 +5,12 @@
 	height: 1000px;
 	float:left;
 }
-#der
+#der 
 {
     width: 25%;
     height: 1000px;
     float:right;
+    background: red;
 }
 .result
 {
@@ -49,10 +50,4 @@
             }
 
 
-#coor
-{
-	width:25%;
-	height: 1000px;
-	
-	background-color: red;
-}
+

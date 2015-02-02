@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <?php
 include 'administrarJugadores.php';
-//$colorUsuario = $_SESSION["color"];
-//$nombreUsuario = $_SESSION["usuario"];
-//var_dump($datos);
 ?>
 <html>
 	<head>
@@ -36,6 +33,6 @@ include 'administrarJugadores.php';
 </html>
 <?php
 echo "<script> global_nombreUsuario = \" ".  $nombreUsuario . "\";</script>" ;
-echo "<script> global_colorUsuario = \" ".  $colorUsuario . "\";</script>" ;
+echo "<script> global_colorUsuario = \" ".  $nombreColor . "\";</script>" ;
 include 'mostrarPosiciones.js';
 ?>

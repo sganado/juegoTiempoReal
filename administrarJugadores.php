@@ -3,50 +3,41 @@
 	//empieza la sesion el jugador
 	session_start();
 
-	//Almaceno por cada jugador que inicia sesion la ip.
-	
-	/*$contenido = file_get_contents("datosJugadores.json");
-	
-	$datos = json_decode($contenido,true); 
-	
-   
-	$_SESSION["ip"] = $_SERVER['REMOTE_ADDR'];
-
-	$datos["Jugador"]["ip"]= $_SESSION["ip"];
-
+	//me guardo la ip
+    $_SESSION["ip"] = $_SERVER['REMOTE_ADDR'];
+    //asigno nombree al usuario
     $nombreUsuario = get_random_abc();
-    $datos["Jugador"]["usuario"]= $nombreUsuario;
-  
-	$nombreColor = get_random_color();
-	$datos["Jugador"]["color"]=$nombreColor;
-
-    var_dump($datos);
-    
-   
-   	$archivo = fopen("datosJugadores","w");
-   	fwrite($archivo,json_encode($datos,JSON_UNESCAPED_UNICODE));
-   	fclose($archivo);*/
-   $_SESSION["ip"] = $_SERVER['REMOTE_ADDR'];
-    $nombreUsuario = get_random_abc();
+    //asigno color
     $nombreColor = get_random_color();
 
-   	$jugadores = array("jugadores"=> array(
-   		  array( 
-   			        "ip"=>$_SESSION["ip"],
-   				    "usuario"=>$nombreUsuario,
-   				    "color"=>$nombreColor
-   				),
-   		  array( 
-   			        "ip"=>$_SESSION["ip"],
-   				    "usuario"=>$nombreUsuario,
-   				    "color"=>$nombreColor
-   				),
-   		));
-   	$json_jugadores = json_encode($jugadores);
-   	$archivo = fopen("datosJugadores.json","w+");
-   	fwrite($archivo,$json_jugadores);
+    //me traigo el contenido del json, por primera vez va a estar vacio
+    $str_datos = file_get_contents("datosJugadores.json");
+
+    //lo decodifico al contenido
+    $datos = json_decode($str_datos,true);
+
+    //me armo los datos del jugador en un array asociativo
+    $jugador= array();
+    $jugador["ip"] = $_SESSION["ip"];
+    $jugador["usuario"] = $nombreUsuario;
+    $jugador["color"] = $nombreColor;
+	  	
+	 //me voy guardando los jugadores en datos
+	$datos[] = $jugador;
+
+	//Abro el archivo json en forma de escritura
+	$archivo = fopen("datosJugadores.json","w+");	
+
+	//codifico los datos del jugador
+   	$json_jugadores = json_encode($datos,JSON_UNESCAPED_UNICODE);
+  	
+  	//grabo
+   	fwrite($archivo, $json_jugadores);
+
+   	//cierro el archivo
    	fclose($archivo);
-   	var_dump($json_jugadores);
+ 
+
     function get_random_color()
 	{
 		
@@ -57,7 +48,6 @@
 	 	}
 	 	return "#" . $color;
 	}   
-
 
 	function get_random_abc()
 	{

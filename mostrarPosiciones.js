@@ -66,7 +66,7 @@ $(document).on('click',function(e)
 		//server Sent Event
 		if(typeof(EventSource) !== "undefined") 
 		{
-			var source = new EventSource("sse.php");
+			var source = new EventSource("posicionesJugadores.php");
 			source.onmessage = function(event) 
 			{
 				document.getElementById("izq").innerHTML += event.data + "<br>";
