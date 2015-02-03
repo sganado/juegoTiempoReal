@@ -30,7 +30,6 @@ $(document).on('click',function(e)
 	cont++;
 	var x=e.pageX, y=e.pageY;
 	
-	
 	$.ajax({
 		type: 'POST',
 		dataType: 'json',
@@ -64,7 +63,7 @@ $(document).on('click',function(e)
 });
 
 		//server Sent Event
-		if(typeof(EventSource) !== "undefined") 
+		/*if(typeof(EventSource) !== "undefined") 
 		{
 			var source = new EventSource("posicionesJugadores.php");
 			source.onmessage = function(event) 
@@ -75,5 +74,5 @@ $(document).on('click',function(e)
 		} else 
 		{
 			document.getElementById("izq").innerHTML = "Sorry, your browser does not support server-sent events...";
-		}
+		}*/
 </script>

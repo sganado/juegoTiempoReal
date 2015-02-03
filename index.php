@@ -13,7 +13,7 @@ include 'administrarJugadores.php';
 		<div class ="container" id="cuerpo">
 			<div class="row">
 				<div class="col-lg-10" id="izq">	
-					<label id="respuesta"></label>
+				
 				</div>
 				<div class="col-lg-2" id="der">
 				

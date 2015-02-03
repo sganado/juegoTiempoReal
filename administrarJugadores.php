@@ -21,6 +21,8 @@
     $jugador["ip"] = $_SESSION["ip"];
     $jugador["usuario"] = $nombreUsuario;
     $jugador["color"] = $nombreColor;
+    $jugador["x"]= 0;
+    $jugador["y"]=0;
 	  	
 	 //me voy guardando los jugadores en datos
 	$datos[] = $jugador;
