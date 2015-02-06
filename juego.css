@@ -1,5 +1,4 @@
-
-#izq
+#izq 
 {
 	width: 75%;
 	height: 1000px;
@@ -8,7 +7,7 @@
 #der 
 {
     width: 25%;
-    height: 1000px;
+    height: 380px;
     float:right;
     background: red;
 }
@@ -48,6 +47,9 @@
                 background: #ccc;
                 border-radius: 3px;
             }
+
+ 
+        
 
 
 

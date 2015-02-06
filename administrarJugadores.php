@@ -15,18 +15,41 @@
 
     //lo decodifico al contenido
     $datos = json_decode($str_datos,true);
+    
+    if(empty($datos))
+    {
+    	//me armo los datos del jugador en un array asociativo
+	    $jugador= array();
+	    $jugador["ip"] = $_SESSION["ip"];
+	    $jugador["usuario"] = $nombreUsuario;
+	    $jugador["color"] = $nombreColor;
+	    $jugador["x"]= 0;
+	    $jugador["y"]=0;
+	    //me voy guardando los jugadores en datos
+	    $datos[] = $jugador;
 
-    //me armo los datos del jugador en un array asociativo
-    $jugador= array();
-    $jugador["ip"] = $_SESSION["ip"];
-    $jugador["usuario"] = $nombreUsuario;
-    $jugador["color"] = $nombreColor;
-    $jugador["x"]= 0;
-    $jugador["y"]=0;
-	  	
-	 //me voy guardando los jugadores en datos
-	$datos[] = $jugador;
-
+    }else
+    {
+    	foreach ($datos as $fila)
+		{
+			if($fila["ip"] !=  $_SESSION["ip"] )
+			{
+				//me armo los datos del jugador en un array asociativo
+			    $jugador= array();
+			    $jugador["ip"] = $_SESSION["ip"];
+			    $jugador["usuario"] = $nombreUsuario;
+			    $jugador["color"] = $nombreColor;
+			    $jugador["x"]= 0;
+			    $jugador["y"]=0;
+			    //me voy guardando los jugadores en datos
+			    $datos[] = $jugador;
+			}else
+				echo "No se puede iniciar el juego dos veces con la misma ip.";
+		}
+    }
+  
+	
+	
 	//Abro el archivo json en forma de escritura
 	$archivo = fopen("datosJugadores.json","w+");	
 
@@ -53,7 +76,7 @@
 
 	function get_random_abc()
 	{
-		$todos = "abcdefghijklmnopqrstuvwxyz";
+		$todos = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 		$aleatorio= $todos[rand(0,25)]; //Desde la posicion 0 hasta la 25 de $todos 
 		return $aleatorio;

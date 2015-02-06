@@ -3,32 +3,27 @@
 header('Content-Type: text/event-stream');
 header('Cache-Control: no-cache');
 
-//$time = date('r');
-
-//echo "data: The server time is: {$time}\n\n";
-//echo "data: el nombre del server: {$misDatosJSON}\n\n";
-
 #######################################################################
 $str_datos = file_get_contents("datosJugadores.json");
 $datos = json_decode($str_datos,true);
-
- foreach ($datos as $dato) 
- {
- 	
- 	$datoUsuario =$dato["usuario"];
- 	$postUsuario = $_POST['usuario'];
+$i=0;
+$tamano = count($datos);
+$postUsuario = $_POST['ip'];
+ 
+while($i <$tamano)
+ {	
  	$datoX = $_POST['x'];
  	$datoY = $_POST['y'];
- 	if( $datoUsuario =  $postUsuario)
+ 	
+ 	if($datos[$i]["ip"] != $postUsuario)
+ 		$i++;
+ 	else
  	{
-
-		$dato["x"]= $datoX;
-		$dato["y"]= $datoY;	
-	    $datos[] = $dato;
- 	}
- }
-	
-//var_dump($datos);
+ 		$datos[$i]["x"]= $datoX;
+		$datos[$i]["y"]= $datoY;	
+		$i= $tamano;
+ 	}	
+}
 $archivo = fopen("datosJugadores.json","w+");	
 //codifico los datos del jugador
 $json_jugadores = json_encode($datos,JSON_UNESCAPED_UNICODE);
@@ -41,12 +36,7 @@ fclose($archivo);
 
 foreach ($datos as $fila) 
 {
-		echo "data: usuario: {$fila['usuario']}\n\n";
+	echo "data: usuario: {$fila['usuario']} coordenadas:  x: {$fila['x']} y: {$fila['y']}\n\n";
 }	
-//$resultado['enviado'] = $_POST;
-//$resultado['respuesta'] = 'Usuario'.$_POST['usuario'].', color:'. $_POST['color'] . ', coordenada x: '.$_POST['x'].' coordenada y:'.$_POST['y'];
-     
-//echo json_encode($resultado);
 flush();
-
 ?>

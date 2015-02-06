@@ -10,11 +10,14 @@ include 'administrarJugadores.php';
 		
 	</head>
 	<body>
+
 		<div class ="container" id="cuerpo">
+
 			<div class="row">
-				<div class="col-lg-10" id="izq">	
-				
-				</div>
+
+				<div class="col-lg-10" id="izq"> 
+				   <div id = "parrafo" ></div>
+				</div> 
 				<div class="col-lg-2" id="der">
 				
 				</div>
@@ -28,11 +31,10 @@ include 'administrarJugadores.php';
 			</ul>
 		</div>
 		
-	<!--	<label id="resultados"></label>-->
 	</body>
 </html>
 <?php
-echo "<script> global_nombreUsuario = \" ".  $nombreUsuario . "\";</script>" ;
-echo "<script> global_colorUsuario = \" ".  $nombreColor . "\";</script>" ;
+echo "<script> global_nombreUsuario =\"".$nombreUsuario . "\";</script>" ;
+echo "<script> global_ipUsuario =\"".$_SESSION["ip"] . "\";</script>" ;
 include 'mostrarPosiciones.js';
 ?>

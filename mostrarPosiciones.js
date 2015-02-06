@@ -1,10 +1,11 @@
 <script>
-//obtener las coordenadas X e Y del raton
-
+//obtener las coordenadas X e Y del raton, funcion cuanod estoy moviendo el mouse
 $(document).on('mousemove',function(e)
 { 
     var x= e.pageX, y= e.pageY;
-    $('#izq').html('<strong>X: </strong>'+x+', <strong>Y: </strong>'+y);
+    $('#parrafo').css('display','none');
+
+   // $('#parrafo').html('<strong>X: </strong>'+x+', <strong>Y: </strong>'+y);
 });
 
 //manejador de evento para el clic derecho (contextmenu)
@@ -25,25 +26,27 @@ $(document).on('contextmenu',function(e)
 });
 //manejador del evento clic sobre el documento
 var cont=0;
+
 $(document).on('click',function(e)
 {
-	cont++;
+		
+	//cuando se hace clic ocultamos el menu contextual
 	var x=e.pageX, y=e.pageY;
-	
+	cont++;
 	$.ajax({
 		type: 'POST',
 		dataType: 'json',
 		url:'posicionesJugadores.php',
 		data: 
 		{
-	        usuario: global_nombreUsuario,
-	        color: global_colorUsuario,
+	        usuario:global_nombreUsuario,
+	        ip:global_ipUsuario,
 	        x: x,
 	        y: y
         },
         success: function(datos)
         {
-	       // $('#resultados').text(JSON.stringify(datos, null, 4));
+	        // $('#resultados').text(JSON.stringify(datos, null, 4));
 	        $('#izq').text(datos.respuesta).fadeIn('slow');
 	       
         }
@@ -51,7 +54,9 @@ $(document).on('click',function(e)
 	
     //cuando se hace clic ocultamos el menu contextual
     $('#menuDer').css('display','none');
-    $('.container').css('cursor','grab');
+
+    //$('.container').css( 'cursor', 'url(cursor.cur), auto');
+
     $('#der').append('<div class="coor">X: '+x+', Y:'+y+'</div>');
    
     var nodos = document.getElementById('der');
@@ -60,19 +65,29 @@ $(document).on('click',function(e)
     {	
 		nodos.childNodes[1].remove(); 
 	}
+	var margin=5;
+	 $('#parrafo').css({
+		display:    'block',
+		background: 'blue',
+		width: '30%',
+	    height: '180px',
+		//cursor: 'pointer',
+		left:       x + margin,
+		top:        y + margin
+	});
+	//server Sent Event
+	/*if(typeof(EventSource) !== "undefined") 
+	{
+		var source = new EventSource("posicionesJugadores.php");
+		source.onmessage = function(event) 
+		{
+			document.getElementById("izq").innerHTML += event.data + "<br>";
+					 
+		};
+	} else 
+	{
+		document.getElementById("izq").innerHTML = "Este buscador no soporta server-sent events..";
+	}*/
 });
 
-		//server Sent Event
-		/*if(typeof(EventSource) !== "undefined") 
-		{
-			var source = new EventSource("posicionesJugadores.php");
-			source.onmessage = function(event) 
-			{
-				document.getElementById("izq").innerHTML += event.data + "<br>";
-				 
-			};
-		} else 
-		{
-			document.getElementById("izq").innerHTML = "Sorry, your browser does not support server-sent events...";
-		}*/
 </script>
