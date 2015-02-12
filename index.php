@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+
 <?php
 include 'administrarJugadores.php';
 ?>
@@ -17,6 +17,7 @@ include 'administrarJugadores.php';
 
 				<div class="col-lg-10" id="izq"> 
 				   <div id = "parrafo" ></div>
+				    <div id = "parrafoDos" ></div>
 				</div> 
 				<div class="col-lg-2" id="der">
 				

@@ -1,9 +1,5 @@
-
 <?php
-header('Content-Type: text/event-stream');
-header('Cache-Control: no-cache');
 
-#######################################################################
 $str_datos = file_get_contents("datosJugadores.json");
 $datos = json_decode($str_datos,true);
 $i=0;
@@ -11,7 +7,7 @@ $tamano = count($datos);
 $postUsuario = $_POST['ip'];
  
 while($i <$tamano)
- {	
+{	
  	$datoX = $_POST['x'];
  	$datoY = $_POST['y'];
  	
@@ -32,11 +28,6 @@ $json_jugadores = json_encode($datos,JSON_UNESCAPED_UNICODE);
 fwrite($archivo, $json_jugadores);
 //cierro el archivo
 fclose($archivo);
-##########################################################################
 
-foreach ($datos as $fila) 
-{
-	echo "data: usuario: {$fila['usuario']} coordenadas:  x: {$fila['x']} y: {$fila['y']}\n\n";
-}	
-flush();
+
 ?>

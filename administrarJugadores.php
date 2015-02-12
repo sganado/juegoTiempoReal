@@ -15,6 +15,9 @@
 
     //lo decodifico al contenido
     $datos = json_decode($str_datos,true);
+    $contIpDif=0;
+
+    $tamano = count($datos);
     
     if(empty($datos))
     {
@@ -32,24 +35,31 @@
     {
     	foreach ($datos as $fila)
 		{
+			//cuento la cantidad de veces que comparo las ips y fueron diferentes
 			if($fila["ip"] !=  $_SESSION["ip"] )
-			{
-				//me armo los datos del jugador en un array asociativo
-			    $jugador= array();
-			    $jugador["ip"] = $_SESSION["ip"];
-			    $jugador["usuario"] = $nombreUsuario;
-			    $jugador["color"] = $nombreColor;
-			    $jugador["x"]= 0;
-			    $jugador["y"]=0;
-			    //me voy guardando los jugadores en datos
-			    $datos[] = $jugador;
-			}else
-				echo "No se puede iniciar el juego dos veces con la misma ip.";
+				$contIpDif++;
 		}
+		
+		//si recorre todas las ip y es igual al contador dce ips diferentes significas que esa ip no ha iniciado sesion enel juego
+		if($contIpDif == $tamano)
+	    {
+			//me armo los datos del jugador en un array asociativo
+		    $jugador= array();
+		    $jugador["ip"] = $_SESSION["ip"];
+		    $jugador["usuario"] = $nombreUsuario;
+		    $jugador["color"] = $nombreColor;
+		    $jugador["x"]= 0;
+		    $jugador["y"]=0;
+		    //me voy guardando los jugadores en datos
+		    $datos[] = $jugador;
+	    }else
+	    {
+	    	//alguna ip guardada en el json es igual ala ip que viene por post
+			echo "No se puede iniciar el juego dos veces con la misma ip.";
+			exit;
+	    }
     }
-  
-	
-	
+
 	//Abro el archivo json en forma de escritura
 	$archivo = fopen("datosJugadores.json","w+");	
 
@@ -62,10 +72,8 @@
    	//cierro el archivo
    	fclose($archivo);
  
-
     function get_random_color()
-	{
-		
+	{	
 	   $hexaColor= array('0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F');
 	 	for ($i=0; $i < 6; $i++) 
 	 	{ 	

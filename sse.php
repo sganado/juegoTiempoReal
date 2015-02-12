@@ -2,17 +2,15 @@
 header('Content-Type: text/event-stream');
 header('Cache-Control: no-cache');
 
-//$time = date('r');
+$datos = file_get_contents("datosJugadores.json");
 
-//echo "data: The server time is: {$time}\n\n";
-//echo "data: el nombre del server: {$misDatosJSON}\n\n";
+$jugadores = json_decode($datos,true);
 
-
-
- $resultado['enviado'] = $_POST;
-  $resultado['respuesta'] = 'Usuario'.$_POST['usuario'].', color:'. $_POST['color'] . ', coordenada x: '.$_POST['x'].' coordenada y:'.$_POST['y'];
-     
-   echo json_encode($resultado);
-    flush();
-
+foreach ($jugadores as $jugador) 
+{
+	if($jugador["ip"] != $_SERVER['REMOTE_ADDR'])
+		echo "data: {$jugador['x']},{$jugador['y']}, usuario: {$jugador['usuario']} \n\n"; 		
+}
+	
+flush();
 ?>
