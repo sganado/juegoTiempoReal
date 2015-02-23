@@ -1,13 +1,12 @@
-<script>
+
 //obtener las coordenadas X e Y del raton, funcion cuanod estoy moviendo el mouse
 $(document).on('mousemove',function(e)
 { 
     var x= e.pageX, y= e.pageY;
-   // $('.container').css( 'cursor','url(www.dolliehost.com/dolliecrave/cursors/cursors-all/cartoon22.gif)', 'default');
 });
 
 //manejador de evento para el clic derecho (contextmenu)
-/*$(document).on('contextmenu',function(e)
+$(document).on('contextmenu',function(e)
 {
 	//evitamos que aparezca el menu predeterminado del navegador (si, asi se "bloquea")
 	e.preventDefault();
@@ -21,18 +20,24 @@ $(document).on('mousemove',function(e)
 		left:       x,
 		top:        y
 	});
-});*/
-//manejador del evento clic sobre el documento
-var cont=0;
-$('#parrafo').css('display','none');
+});
 
+//contador para que no exceda mas de 20 registros en la parte derecha.
+var cont=0;
+ var n=1;
+
+//manejador del evento clic sobre el documento
 $(document).on('click',function(e)
 {
-	
 	//cuando se hace clic ocultamos el menu contextual
 	var x=e.pageX, y=e.pageY;
 	
 	cont++;
+
+	 //cuando se hace clic ocultamos el menu contextual
+    $('#menuDer').css('display','none');
+
+	//Mando por post los datos para modificar las coordenadas en el archivo json.
 	$.ajax({
 		type: 'POST',
 		dataType: 'json',
@@ -46,62 +51,108 @@ $(document).on('click',function(e)
         },
         success: function(datos)
         {
-	        // $('#resultados').text(JSON.stringify(datos, null, 4));
 	        $('#izq').text(datos.respuesta).fadeIn('slow');
 	       
         }
 	});
 	
-    //cuando se hace clic ocultamos el menu contextual
-    $('#menuDer').css('display','none');
+    //###################################################################################################
 
-    
-    $('#der').append('<div class="coor"> Estuve aqu&iacute!! X: '+x+', Y:'+y+'</div>');
-   
-    var nodos = document.getElementById('der');
-    //var tamano = nodos.childNodes.length;
-    if(cont > 20)
-    {	
-		nodos.childNodes[1].remove(); 
-	}
+    //DIV misPosiciones.
+    //Creo un div en el div misPosiciones para hacer registro de donde voy haciendo click.
+    $('#misPosiciones').append('<div class="coordenadas"> Estuve aqu&iacute!! (x: '+x+', y:'+y+')</div>');
 
-	$('#parrafo').html('<strong>Usuario: </strong>'+global_nombreUsuario+' <strong>, X: </strong>'+x+', <strong>Y: </strong>'+y);	
+    //Ultimo div que crea, lo oculto.
+    $('.coordenadas:last-child').css({
+		display:    'none'
 
-    $('#parrafo').css({
-		display:    'block',
-		position: "absolute",   
-		left:       x,
-		top:        y
 	});
+   	//Al ultimo div, le digo que aparezca con  una tardanza de 2s.
+    $(".coordenadas:last-child").fadeIn(2000);
+
+     //var nodos = document.getElementById('misPosiciones');
+
+    //Control de la cantidad de registros que se pueden ver en la parte derecha.
+    if(cont > 3)
+    {
+      	$(".coordenadas:nth-child(n)").fadeOut();
+      	n++;
+    }
+		
+	//##################################################################################################################
+
+	//DIV contenedorJugadores.
+	//Si no existe el div con ese id, lo creo y le agrego el nombre de usuario.
+	if(!(document.getElementById(''+global_nombreUsuario+'')))
+	{
+		var miJugador = ('<div class = "agrandarMiClick" id="'+global_nombreUsuario+'">(Aca estoy yo)'+global_nombreUsuario+'</div>'); 
+		
+
+		//se lo agrego al contenedor de jugadores
+		$('#contenedorJugadores').append(miJugador);
+	}else
+		//si ya existe el el id del div, voy actualizando lo que tiene dentro
+		document.getElementById(''+global_nombreUsuario+'').innerHTML= '(Aca estoy yo)'+global_nombreUsuario; 
+	
+	//Le digo que lo imprima en la posicion donde hace el click.
+	$('#'+global_nombreUsuario+'').css({
+		display:    'inline-block',
+		color: global_nombreColor,
+		position: "absolute", 
+		left:x,
+		top:y
+
+	});	
+
+	$('#'+global_nombreUsuario+'').css("margin-left",-56+"px");
+	$('#'+global_nombreUsuario+'').css("margin-top",-13+"px");
+
+	//##################################################################################################################
 	
 });
- //Server Sent Event
- //$('#parrafoDos').css('display','none');
+ 
+
+    //SERVER SENT EVENT
 	if(typeof(EventSource) !== "undefined") 
 	{
+
 		var source = new EventSource("sse.php");
 		source.onmessage = function(event) 
 		{
+			//Guarda lo que trae el event.data.
 			var cadena = event.data;
+
+			//Va armando un arreglo separando lo que viene por la coma que los separa.
 			var resultado = cadena.split(",");
-			var  parrafo = document.getElementById("parrafoDos");
-			parrafo.innerHTML = event.data;
-		
-			//div.append(parrafo);
-	        $(document.body).append(parrafo);  
-			//var w = $('#parrafoDos').append(event.data);
-			//$(document.body).append(w);
-		
-			$('#parrafoDos').css({
-				display:    'block',
-				position: "absolute",   
-				left:     resultado[0],
-				top:      resultado[1]
-		    });
+
+			//Guarda las coordenadas.
+			x= resultado[0];
+			y = resultado[1];
+
+			//Me fijo si el id=nombre del usuario ya existe.
+			if(!(document.getElementById(''+resultado[2]+'')))
+			{
 				
+				//Creo el elemento div.
+			    var losJugadores = ('<div class="agrandarOtrosClick" id="'+resultado[2]+'">'+ resultado[2]+'</div>');
+
+		        $('#contenedorJugadores').append(losJugadores);
+			}else
+				document.getElementById(''+resultado[2]+'').innerHTML= resultado[2];
+
+			
+			//Le digo que lo imprima en la posicion donde hace el click.
+			$('#'+resultado[2]+'').css({
+				display:    'inline-block',
+				color: resultado[3],
+				position: "absolute", 
+				left:     x ,
+				top:      y
+		    });
+					
 		}
 	}else 
-		document.getElementById("izq").innerHTML = "Este buscador no soporta server-sent events..";
+		//Se imprime un aviso si el navegador no soporta el server sent event
+		document.getElementById("contenedorJugadores").innerHTML = "Este buscador no soporta server-sent events..";
    
-	
-</script>
+

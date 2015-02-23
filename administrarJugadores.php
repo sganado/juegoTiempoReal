@@ -1,19 +1,21 @@
 <?php
 
-	//empieza la sesion el jugador
+	//Empieza la sesion el jugador.
 	session_start();
 
-	//me guardo la ip
+	//Me guardo la ip.
     $_SESSION["ip"] = $_SERVER['REMOTE_ADDR'];
-    //asigno nombree al usuario
+
+    //Asigno nombree al usuario.
     $nombreUsuario = get_random_abc();
-    //asigno color
+
+    //Asigno color.
     $nombreColor = get_random_color();
 
-    //me traigo el contenido del json, por primera vez va a estar vacio
+    //Me traigo el contenido del json, por primera vez va a estar vacio.
     $str_datos = file_get_contents("datosJugadores.json");
 
-    //lo decodifico al contenido
+    //Lo decodifico al contenido.
     $datos = json_decode($str_datos,true);
     $contIpDif=0;
 
@@ -21,55 +23,57 @@
     
     if(empty($datos))
     {
-    	//me armo los datos del jugador en un array asociativo
+    	//Me armo los datos del jugador en un array asociativo.
 	    $jugador= array();
 	    $jugador["ip"] = $_SESSION["ip"];
 	    $jugador["usuario"] = $nombreUsuario;
 	    $jugador["color"] = $nombreColor;
 	    $jugador["x"]= 0;
 	    $jugador["y"]=0;
-	    //me voy guardando los jugadores en datos
+
+	    //Me voy guardando los jugadores en datos
 	    $datos[] = $jugador;
 
     }else
     {
     	foreach ($datos as $fila)
 		{
-			//cuento la cantidad de veces que comparo las ips y fueron diferentes
+			//Cuento la cantidad de veces que comparo las ips y fueron diferentes.
 			if($fila["ip"] !=  $_SESSION["ip"] )
 				$contIpDif++;
 		}
 		
-		//si recorre todas las ip y es igual al contador dce ips diferentes significas que esa ip no ha iniciado sesion enel juego
+		//Si recorre todas las ip y es igual al contador dce ips diferentes significas que esa ip no ha iniciado sesion enel juego.
 		if($contIpDif == $tamano)
 	    {
-			//me armo los datos del jugador en un array asociativo
+			//Me armo los datos del jugador en un array asociativo.
 		    $jugador= array();
 		    $jugador["ip"] = $_SESSION["ip"];
 		    $jugador["usuario"] = $nombreUsuario;
 		    $jugador["color"] = $nombreColor;
 		    $jugador["x"]= 0;
 		    $jugador["y"]=0;
-		    //me voy guardando los jugadores en datos
+
+		    //Me voy guardando los jugadores en datos.
 		    $datos[] = $jugador;
 	    }else
 	    {
-	    	//alguna ip guardada en el json es igual ala ip que viene por post
+	    	//Alguna ip guardada en el json es igual ala ip que viene por post.
 			echo "No se puede iniciar el juego dos veces con la misma ip.";
 			exit;
 	    }
     }
 
-	//Abro el archivo json en forma de escritura
+	//Abro el archivo json en forma de escritura.
 	$archivo = fopen("datosJugadores.json","w+");	
 
 	//codifico los datos del jugador
    	$json_jugadores = json_encode($datos,JSON_UNESCAPED_UNICODE);
   	
-  	//grabo
+  	//Grabo
    	fwrite($archivo, $json_jugadores);
 
-   	//cierro el archivo
+   	//Cierro el archivo
    	fclose($archivo);
  
     function get_random_color()
